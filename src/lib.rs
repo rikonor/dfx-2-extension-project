@@ -22,8 +22,14 @@ const CLI_SPEC: &str = r#"{
         {
             "name": "add",
             "args": [
-                { "name": "a" },
-                { "name": "b" }
+                { "name": "name" },
+                { "name": "path", "long": "path" }
+            ]
+        },
+        {
+            "name": "rm",
+            "args": [
+                { "name": "name" }
             ]
         }
     ]
@@ -46,12 +52,21 @@ impl cli::Guest for Component {
         let m = c.get_matches_from(args);
 
         match m.subcommand() {
+            // add
             Some(("add", m)) => {
-                let a = m.try_get_one::<String>("a");
-                let b = m.try_get_one::<String>("b");
+                let name = m.try_get_one::<String>("name");
+                let path = m.try_get_one::<String>("path");
 
-                print(&format!("{a:?} {b:?}"));
+                print(&format!("{name:?} {path:?}"));
             }
+
+            // rm
+            Some(("rm", m)) => {
+                let name = m.try_get_one::<String>("name");
+
+                print(&format!("{name:?}"));
+            }
+
             _ => {}
         }
 

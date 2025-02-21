@@ -57,14 +57,14 @@ impl cli::Guest for Component {
                 let name = m.try_get_one::<String>("name");
                 let path = m.try_get_one::<String>("path");
 
-                print(&format!("{name:?} {path:?}"));
+                print(&format!("[{}] {name:?} {path:?}", time()));
             }
 
             // rm
             Some(("rm", m)) => {
                 let name = m.try_get_one::<String>("name");
 
-                print(&format!("{name:?}"));
+                print(&format!("[{}] {name:?}", time()));
             }
 
             _ => {}

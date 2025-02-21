@@ -1,0 +1,22 @@
+package my-namespace:my-package;
+
+interface cli {
+  // spec provides a schema a for the cli
+  spec: func() -> string;
+
+  // run the cli portion of the extension
+  run: func(args: list<string>) -> u8;
+}
+
+interface lib {
+  // my-fn is a test function
+  my-fn: func(s: string) -> string;
+}
+
+world extension {
+  //
+  export lib;
+
+  //
+  export cli;
+}

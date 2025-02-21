@@ -4,7 +4,7 @@ use clap::Command;
 mod bindings;
 
 // imports
-use bindings::my_namespace::my_package::host::time;
+use bindings::my_namespace::my_package::host::{print, time};
 
 // exports
 use bindings::exports::my_namespace::my_package::{cli, lib};
@@ -16,7 +16,17 @@ struct Component;
 
 const CLI_SPEC: &str = r#"{
     "name": "ext-1",
-    "help": "greatest extension ever made"
+    "help": "greatest extension ever made",
+    "args": [],
+    "subcommands": [
+        {
+            "name": "add",
+            "args": [
+                { "name": "a" },
+                { "name": "b" }
+            ]
+        }
+    ]
 }"#;
 
 // TODO(or.ricon): Can I use static to pre-initialize the clap Command
@@ -33,7 +43,14 @@ impl cli::Guest for Component {
 
         let c: Command = cspec.into();
 
-        let _ms = c.get_matches_from(args);
+        let m = c.get_matches_from(args);
+
+        match m.subcommand() {
+            Some(("add", m)) => {}
+            _ => {}
+        }
+
+        print("reached");
 
         time() as u8
     }

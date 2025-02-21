@@ -1,8 +1,9 @@
 package my-namespace:my-package;
 
 interface host {
-  time: func() -> u64;
+  print: func(s: string);
   rand: func() -> u8;
+  time: func() -> u64;
 }
 
 interface cli {

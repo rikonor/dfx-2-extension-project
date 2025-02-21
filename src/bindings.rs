@@ -11,20 +11,22 @@ pub mod my_namespace {
             #[doc(hidden)]
             static __FORCE_SECTION_REF: fn() = super::super::super::__link_custom_section_describing_imports;
             #[allow(unused_unsafe, clippy::all)]
-            pub fn time() -> u64 {
+            pub fn print(s: &str) {
                 unsafe {
+                    let vec0 = s;
+                    let ptr0 = vec0.as_ptr().cast::<u8>();
+                    let len0 = vec0.len();
                     #[cfg(target_arch = "wasm32")]
                     #[link(wasm_import_module = "my-namespace:my-package/host")]
                     extern "C" {
-                        #[link_name = "time"]
-                        fn wit_import() -> i64;
+                        #[link_name = "print"]
+                        fn wit_import(_: *mut u8, _: usize);
                     }
                     #[cfg(not(target_arch = "wasm32"))]
-                    fn wit_import() -> i64 {
+                    fn wit_import(_: *mut u8, _: usize) {
                         unreachable!()
                     }
-                    let ret = wit_import();
-                    ret as u64
+                    wit_import(ptr0.cast_mut(), len0);
                 }
             }
             #[allow(unused_unsafe, clippy::all)]
@@ -42,6 +44,23 @@ pub mod my_namespace {
                     }
                     let ret = wit_import();
                     ret as u8
+                }
+            }
+            #[allow(unused_unsafe, clippy::all)]
+            pub fn time() -> u64 {
+                unsafe {
+                    #[cfg(target_arch = "wasm32")]
+                    #[link(wasm_import_module = "my-namespace:my-package/host")]
+                    extern "C" {
+                        #[link_name = "time"]
+                        fn wit_import() -> i64;
+                    }
+                    #[cfg(not(target_arch = "wasm32"))]
+                    fn wit_import() -> i64 {
+                        unreachable!()
+                    }
+                    let ret = wit_import();
+                    ret as u64
                 }
             }
         }
@@ -312,15 +331,16 @@ pub(crate) use __export_extension_impl as export;
 #[cfg(target_arch = "wasm32")]
 #[link_section = "component-type:wit-bindgen:0.36.0:my-namespace:my-package:extension:encoded world"]
 #[doc(hidden)]
-pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 360] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xe8\x01\x01A\x02\x01\
-A\x06\x01B\x04\x01@\0\0w\x04\0\x04time\x01\0\x01@\0\0}\x04\0\x04rand\x01\x01\x03\
-\0\x1cmy-namespace:my-package/host\x05\0\x01B\x02\x01@\x01\x01ss\0s\x04\0\x05my-\
-fn\x01\0\x04\0\x1bmy-namespace:my-package/lib\x05\x01\x01B\x05\x01@\0\0s\x04\0\x04\
-spec\x01\0\x01ps\x01@\x01\x04args\x01\0}\x04\0\x03run\x01\x02\x04\0\x1bmy-namesp\
-ace:my-package/cli\x05\x02\x04\0!my-namespace:my-package/extension\x04\0\x0b\x0f\
-\x01\0\x09extension\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-compo\
-nent\x070.220.1\x10wit-bindgen-rust\x060.36.0";
+pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 378] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xfa\x01\x01A\x02\x01\
+A\x06\x01B\x06\x01@\x01\x01ss\x01\0\x04\0\x05print\x01\0\x01@\0\0}\x04\0\x04rand\
+\x01\x01\x01@\0\0w\x04\0\x04time\x01\x02\x03\0\x1cmy-namespace:my-package/host\x05\
+\0\x01B\x02\x01@\x01\x01ss\0s\x04\0\x05my-fn\x01\0\x04\0\x1bmy-namespace:my-pack\
+age/lib\x05\x01\x01B\x05\x01@\0\0s\x04\0\x04spec\x01\0\x01ps\x01@\x01\x04args\x01\
+\0}\x04\0\x03run\x01\x02\x04\0\x1bmy-namespace:my-package/cli\x05\x02\x04\0!my-n\
+amespace:my-package/extension\x04\0\x0b\x0f\x01\0\x09extension\x03\0\0\0G\x09pro\
+ducers\x01\x0cprocessed-by\x02\x0dwit-component\x070.220.1\x10wit-bindgen-rust\x06\
+0.36.0";
 #[inline(never)]
 #[doc(hidden)]
 pub fn __link_custom_section_describing_imports() {

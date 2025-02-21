@@ -46,13 +46,16 @@ impl cli::Guest for Component {
         let m = c.get_matches_from(args);
 
         match m.subcommand() {
-            Some(("add", m)) => {}
+            Some(("add", m)) => {
+                let a = m.try_get_one::<String>("a");
+                let b = m.try_get_one::<String>("b");
+
+                print(&format!("{a:?} {b:?}"));
+            }
             _ => {}
         }
 
-        print("reached");
-
-        time() as u8
+        0
     }
 }
 

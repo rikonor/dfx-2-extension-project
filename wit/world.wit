@@ -1,5 +1,10 @@
 package my-namespace:my-package;
 
+interface host {
+  time: func() -> u64;
+  rand: func() -> u8;
+}
+
 interface cli {
   // spec provides a schema a for the cli
   spec: func() -> string;
@@ -14,6 +19,9 @@ interface lib {
 }
 
 world extension {
+  //
+  import host;
+
   //
   export lib;
 

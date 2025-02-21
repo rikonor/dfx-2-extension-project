@@ -1,11 +1,16 @@
-use bindings::exports::my_namespace::my_package::{cli, lib};
 use clap::Command;
-use spec::CommandSpec;
 
 #[allow(warnings)]
 mod bindings;
 
+// imports
+use bindings::my_namespace::my_package::host::time;
+
+// exports
+use bindings::exports::my_namespace::my_package::{cli, lib};
+
 mod spec;
+use spec::CommandSpec;
 
 struct Component;
 
@@ -30,7 +35,7 @@ impl cli::Guest for Component {
 
         let _ms = c.get_matches_from(args);
 
-        0
+        time() as u8
     }
 }
 

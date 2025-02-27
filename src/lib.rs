@@ -15,21 +15,15 @@ use spec::CommandSpec;
 struct Component;
 
 const CLI_SPEC: &str = r#"{
-    "name": "ext-1",
-    "help": "greatest extension ever made",
+    "name": "project",
+    "help": "Utilities for managing projects",
     "args": [],
     "subcommands": [
         {
-            "name": "add",
+            "name": "new",
             "args": [
                 { "name": "name" },
                 { "name": "path", "long": "path" }
-            ]
-        },
-        {
-            "name": "rm",
-            "args": [
-                { "name": "name" }
             ]
         }
     ]
@@ -53,9 +47,9 @@ impl cli::Guest for Component {
 
         match m.subcommand() {
             // add
-            Some(("add", m)) => {
-                let name = m.try_get_one::<String>("name");
+            Some(("new", m)) => {
                 let path = m.try_get_one::<String>("path");
+                let name = m.try_get_one::<String>("name");
 
                 print(&format!("[{}] {name:?} {path:?}", time()));
             }

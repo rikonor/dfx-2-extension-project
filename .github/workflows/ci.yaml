@@ -1,0 +1,38 @@
+name: ci
+
+on:
+  push:
+    branches: main
+
+permissions:
+  contents: write
+
+env:
+  NAME: project
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        platform:
+          - runs-on: ubuntu-latest
+            target: wasm32-unknown-unknown
+
+    runs-on: ${{ matrix.platform.runs-on }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          rustup target add \
+            ${{ matrix.platform.target }}
+
+          make \
+            CARGO_TARGET=${{ matrix.platform.target }} \
+            CARGO_RELEASE=1 \
+            COMPONENT_OUT_DIR=. \
+                component
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.NAME }}
+          path: ${{ env.NAME }}.component.wasm

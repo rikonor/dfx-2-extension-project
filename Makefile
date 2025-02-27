@@ -1,18 +1,21 @@
 EXTENSION_NAME = project
 
-TARGET 	   ?= wasm32-unknown-unknown
-TARGET_DIR ?= target/$(TARGET)/debug
+CARGO_RELEASE     ?=
+CARGO_TARGET      ?= wasm32-unknown-unknown
+CARGO_TARGET_DIR  ?= target/$(CARGO_TARGET)/debug
+COMPONENT_OUT_DIR ?= $(CARGO_TARGET_DIR)
 
 all: component output-path
 
 build:
 	@cargo build \
-		--target $(TARGET)
+		$(if $(CARGO_TARGET),--target $(CARGO_TARGET)) \
+		$(if $(CARGO_RELEASE),--release)
 
 component: build
 	@wasm-tools component new \
-		$(TARGET_DIR)/$(EXTENSION_NAME).wasm \
-	> $(TARGET_DIR)/$(EXTENSION_NAME).component.wasm \
+		$(CARGO_TARGET_DIR)/$(EXTENSION_NAME).wasm \
+	> $(COMPONENT_OUT_DIR)/$(EXTENSION_NAME).component.wasm \
 
 output-path:
-	@realpath $(TARGET_DIR)/$(EXTENSION_NAME).component.wasm
+	@realpath $(COMPONENT_OUT_DIR)/$(EXTENSION_NAME).component.wasm
